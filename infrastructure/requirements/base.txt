@@ -1,0 +1,19 @@
+# Base Pipeline Requirements
+numpy==1.23.0
+pandas==1.3.5
+pytest==7.4.3 # Required by Data Tests
+requests==2.31.0 # Required by API Calls
+SQLAlchemy==1.4.47
+# Airflow Provider Packages
+apache-airflow-providers-postgres==5.4.0
+airflow-provider-great-expectations==0.2.8
+#apache-airflow-providers-amazon
+# 2nd Level Specific Version Dependency
+# Data Science dependencies
+minio
+scikit-learn
+jinja2
+airflow-provider-great-expectations==0.2.8
+great-expectations==0.15.50
+mlflow
+

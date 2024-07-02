@@ -1,0 +1,1 @@
+SELECT * FROM airflow.iris.data WHERE flag = '{{flag}}'

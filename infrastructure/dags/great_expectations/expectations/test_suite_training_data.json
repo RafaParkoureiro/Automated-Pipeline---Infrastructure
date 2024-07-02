@@ -1,0 +1,88 @@
+{
+  "data_asset_type": "Dataset",
+  "expectation_suite_name": "test_suite_training_data",
+  "expectations": [
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "max_value": 110,
+        "min_value": 100,
+        "result_format": {
+          "result_format": "SUMMARY"
+        }
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "sepal_length_cm",
+        "result_format": {
+          "result_format": "SUMMARY"
+        }
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "sepal_width_cm",
+        "result_format": {
+          "result_format": "SUMMARY"
+        }
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "petal_length_cm",
+        "result_format": {
+          "result_format": "SUMMARY"
+        }
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "petal_width_cm",
+        "result_format": {
+          "result_format": "SUMMARY"
+        }
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "class",
+        "value_set": [
+          "Iris-setosa",
+          "Iris-versicolor",
+          "Iris-virginica"
+        ],
+        "result_format": {
+          "result_format": "SUMMARY"
+        }
+      },
+      "meta": {}
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_in_set",
+      "kwargs": {
+        "column": "flag",
+        "value_set": [
+          "train"
+        ],
+        "result_format": {
+          "result_format": "SUMMARY"
+        }
+      },
+      "meta": {}
+    }
+  ],
+  "meta": {
+    "great_expectations_version": "0.13.22"
+  }
+}

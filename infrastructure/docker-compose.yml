@@ -1,0 +1,100 @@
+version: '2.4'
+
+x-airflow-common:
+  &airflow-common
+  restart: always
+  build: .
+  env_file:
+    - env/.airflow
+    - env/.postgres
+  depends_on:
+    &airflow-common-depends-on
+    metadata:
+      condition: service_healthy
+
+services:
+
+  pgadmin:
+      container_name: container-pgadmin
+      image: dpage/pgadmin4
+      depends_on:
+        - metadata
+      ports:
+        - "5050:80"
+      env_file:
+        - ./env/pgadmin.env
+      restart: unless-stopped
+
+  metadata:
+    image: postgres:14.6
+    restart: always
+    ports:
+      - "5432:5432"
+    env_file:
+      - env/.postgres
+    volumes:
+      - ${DB_DATA_DIR:-./data}:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 5s
+      retries: 5
+
+  artifact-store:
+    image: minio/minio
+    volumes:
+      - ./bucket_data:/data
+    expose:
+      - "9000"
+    ports:
+      - 9000:9000
+      - 9001:9001
+    environment:
+      - MINIO_ROOT_USER=zaai_infrastructure
+      - MINIO_ROOT_PASSWORD=zaai_infrastructure
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: timeout 5s bash -c ':> /dev/tcp/127.0.0.1/9000' || exit 1
+      interval: 1s
+      timeout: 10s
+      retries: 5
+      
+  minio-create-bucket:      #cria um bucket apenas, se não existir
+    image: minio/mc
+    depends_on:
+      artifact-store:
+        condition: service_healthy
+    entrypoint: >
+      bash -c "
+      mc alias set minio http://artifact-store:9000 zaai_infrastructure zaai_infrastructure &&
+      if ! mc ls minio | grep --quiet zaai_infrastructure; then
+        mc mb minio/zaai
+      else
+        echo 'bucket already exists'
+      fi
+      "
+
+
+  webserver:
+    <<: *airflow-common
+    ports:
+      - "80:8080"
+    command: webserver
+    volumes:
+      - ./webserver_config.py:${AIRFLOW_HOME:-/opt/airflow}/webserver_config.py
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http:/localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  scheduler:
+    <<: *airflow-common
+    command: scheduler
+    volumes:
+      - ${DAG_DIRECTORY:-./dags}:${AIRFLOW_HOME:-/opt/airflow}/dags
+
+    healthcheck:
+      test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
+      interval: 10s
+      timeout: 10s
+      retries: 5
