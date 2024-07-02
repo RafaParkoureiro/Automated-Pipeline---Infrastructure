@@ -1,0 +1,6 @@
+POSTGRES_USER=airflow
+POSTGRES_PASSWORD=airflow
+POSTGRES_DB=airflow
+POSTGRES_HOST=metadata
+POSTGRES_PORT=5432
+METADATA_DB_CONN_STR=airflow:airflow@metadata:5432/airflow
