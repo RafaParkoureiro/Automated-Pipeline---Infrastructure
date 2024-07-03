@@ -16,6 +16,11 @@ Inside each folder, you have a readme to run each container
 
 
 After having both containers up, you should verify that everything is connected.
+To run this, you should manually add your input data in PostgreSQL, creating a table and also creating a table for the desired predictions
+
+If pgAdmin is not displaying any server, register to a server doing the following: 
+
+![pgsetup](https://github.com/zaai-ai/infrastructure/assets/106923001/c5e5dbcc-bea4-4fc2-9fb9-9da118c3e66c)
 
 ## Default logins:
 
@@ -40,7 +45,14 @@ After having both containers up, you should verify that everything is connected.
 
 
 
-If pgAdmin is not displaying any server, register to a server doing the following: 
 
-![pgsetup](https://github.com/zaai-ai/infrastructure/assets/106923001/c5e5dbcc-bea4-4fc2-9fb9-9da118c3e66c)
+
+
+Certify that you have a connection made in your airflow UI to the postgres :
+(password is airflow)
+
+![postgrescon](https://github.com/RafaParkoureiro/Automated-Pipeline-Infrastructure/assets/106923001/3d2bb994-d6e8-401e-a77c-11562520bb6c)
+
+
+
 
